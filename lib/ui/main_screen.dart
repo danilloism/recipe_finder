@@ -43,8 +43,8 @@ class _MainScreenState extends State<MainScreen> {
 
   void _getCurrentIndex() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey(_prefSelectedIndexKey) &&
-        prefs.getInt(_prefSelectedIndexKey) != null) {
+    final index = prefs.getInt(_prefSelectedIndexKey);
+    if (index != null) {
       setState(() => _selectedIndex = prefs.getInt(_prefSelectedIndexKey)!);
     }
   }
