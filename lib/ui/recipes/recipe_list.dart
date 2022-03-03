@@ -19,7 +19,7 @@ class RecipeList extends StatefulWidget {
 }
 
 class _RecipeListState extends State<RecipeList> {
-  static const prefSearchKey = 'previousSearches';
+  static const _prefSearchKey = 'previousSearches';
   late final TextEditingController _searchTextController;
   final _scrollController = ScrollController();
   final _currentSearchList = <ApiHits>[];
@@ -31,6 +31,22 @@ class _RecipeListState extends State<RecipeList> {
   var _loading = false;
   var _inErrorState = false;
   var _previousSearches = <String>[];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            _buildSearchCard(),
+            _buildRecipeLoader(context),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -67,34 +83,18 @@ class _RecipeListState extends State<RecipeList> {
     super.dispose();
   }
 
-  void savePreviousSearches() async {
+  void _savePreviousSearches() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(prefSearchKey, _previousSearches);
+    prefs.setStringList(_prefSearchKey, _previousSearches);
   }
 
   void _getPreviousSearches() async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (prefs.containsKey(prefSearchKey)) {
-      final searches = prefs.getStringList(prefSearchKey);
+    if (prefs.containsKey(_prefSearchKey)) {
+      final searches = prefs.getStringList(_prefSearchKey);
       _previousSearches = searches ?? <String>[];
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            _buildSearchCard(),
-            _buildRecipeLoader(context),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildSearchCard() {
@@ -181,7 +181,7 @@ class _RecipeListState extends State<RecipeList> {
 
         if (!_previousSearches.contains(value) && value.isNotEmpty) {
           _previousSearches.add(value);
-          savePreviousSearches();
+          _savePreviousSearches();
         }
       },
     );

@@ -17,15 +17,15 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  final pageList = <Widget>[];
+  final _pageList = <Widget>[];
   static const String _prefSelectedIndexKey = 'selectedIndex';
 
   @override
   void initState() {
     super.initState();
-    pageList.add(const RecipeList());
-    pageList.add(const MyRecipesList());
-    pageList.add(const ShoppingList());
+    _pageList.add(const RecipeList());
+    _pageList.add(const MyRecipesList());
+    _pageList.add(const ShoppingList());
     _getCurrentIndex();
   }
 
@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: pageList,
+        children: _pageList,
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,

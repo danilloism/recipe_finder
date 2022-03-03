@@ -3,6 +3,14 @@ part 'recipe_model.g.dart';
 
 @JsonSerializable()
 class ApiRecipeQuery {
+  @JsonKey(name: 'q')
+  final String query;
+  final int from;
+  final int to;
+  final bool more;
+  final int count;
+  final List<ApiHits> hits;
+
   ApiRecipeQuery({
     required this.query,
     required this.from,
@@ -12,14 +20,6 @@ class ApiRecipeQuery {
     required this.hits,
   });
 
-  @JsonKey(name: 'q')
-  final String query;
-  final int from;
-  final int to;
-  final bool more;
-  final int count;
-  final List<ApiHits> hits;
-
   factory ApiRecipeQuery.fromJson(Map<String, dynamic> json) =>
       _$ApiRecipeQueryFromJson(json);
   Map<String, dynamic> toJson() => _$ApiRecipeQueryToJson(this);
@@ -27,9 +27,9 @@ class ApiRecipeQuery {
 
 @JsonSerializable()
 class ApiHits {
-  ApiHits({required this.recipe});
-
   final ApiRecipe recipe;
+
+  ApiHits({required this.recipe});
 
   factory ApiHits.fromJson(Map<String, dynamic> json) =>
       _$ApiHitsFromJson(json);
@@ -38,6 +38,14 @@ class ApiHits {
 
 @JsonSerializable()
 class ApiRecipe {
+  final String label;
+  final String image;
+  final String url;
+  final List<ApiIngredients> ingredients;
+  final double calories;
+  final double totalWeight;
+  final double totalTime;
+
   ApiRecipe({
     required this.label,
     required this.image,
@@ -47,14 +55,6 @@ class ApiRecipe {
     required this.totalWeight,
     required this.totalTime,
   });
-
-  final String label;
-  final String image;
-  final String url;
-  final List<ApiIngredients> ingredients;
-  final double calories;
-  final double totalWeight;
-  final double totalTime;
 
   factory ApiRecipe.fromJson(Map<String, dynamic> json) =>
       _$ApiRecipeFromJson(json);
@@ -73,14 +73,14 @@ String getWeightAsString(double? weight) {
 
 @JsonSerializable()
 class ApiIngredients {
+  @JsonKey(name: 'text')
+  final String name;
+  final double weight;
+
   ApiIngredients({
     required this.name,
     required this.weight,
   });
-
-  @JsonKey(name: 'text')
-  final String name;
-  final double weight;
 
   factory ApiIngredients.fromJson(Map<String, dynamic> json) =>
       _$ApiIngredientsFromJson(json);
