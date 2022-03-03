@@ -61,12 +61,12 @@ class ApiRecipe {
   Map<String, dynamic> toJson() => _$ApiRecipeToJson(this);
 }
 
-String _getCaloriesAsString(double? calories) {
+String getCaloriesAsString(double? calories) {
   if (calories == null) return '0 KCAL';
   return calories.floor().toString() + 'KCAL';
 }
 
-String _getWeightAsString(double? weight) {
+String getWeightAsString(double? weight) {
   if (weight == null) return '0g';
   return weight.floor().toString() + 'g';
 }

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../colors.dart';
+import 'package:recipe_finder/network/recipe_model.dart';
 
 class RecipeDetails extends StatelessWidget {
-  const RecipeDetails({Key? key}) : super(key: key);
+  const RecipeDetails({Key? key, required this.recipe}) : super(key: key);
+  final ApiRecipe recipe;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +25,7 @@ class RecipeDetails extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: CachedNetworkImage(
-                        // TODO 1
-                        imageUrl:
-                            'https://www.edamam.com/web-img/e42/e42f9119813e890af34c259785ae1cfb.jpg',
+                        imageUrl: recipe.image,
                         alignment: Alignment.topLeft,
                         fit: BoxFit.fill,
                         width: size.width,
@@ -46,22 +46,21 @@ class RecipeDetails extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 16.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    // TODO 2
-                    'Chicken Vesuvio',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    recipe.label,
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                const Padding(
-                    padding: EdgeInsets.only(left: 16.0),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
                     child: Chip(
-                      // TODO 3
-                      label: Text('16CAL'),
+                      label: Text(getCaloriesAsString(recipe.calories)),
                     )),
                 const SizedBox(
                   height: 16,
