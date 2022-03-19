@@ -1,8 +1,8 @@
+import '../network/recipe_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_finder/network/recipe_model.dart';
 
-Widget recipeCard(ApiRecipe recipe) {
+Widget recipeCard(APIRecipe recipe) {
   return Card(
     elevation: 4.0,
     shape: RoundedRectangleBorder(
@@ -12,14 +12,10 @@ Widget recipeCard(ApiRecipe recipe) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(6.0), topRight: Radius.circular(6.0)),
-          child: CachedNetworkImage(
-            imageUrl: recipe.image,
-            height: 210,
-            fit: BoxFit.fill,
-          ),
-        ),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(6.0), topRight: Radius.circular(6.0)),
+            child: CachedNetworkImage(
+                imageUrl: recipe.image, height: 210, fit: BoxFit.fill)),
         const SizedBox(
           height: 12.0,
         ),
@@ -38,7 +34,7 @@ Widget recipeCard(ApiRecipe recipe) {
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(
-            getCaloriesAsString(recipe.calories),
+            getCalories(recipe.calories),
             style: const TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 11,

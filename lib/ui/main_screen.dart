@@ -17,43 +17,83 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  final _pageList = <Widget>[];
-  static const String _prefSelectedIndexKey = 'selectedIndex';
+  List<Widget> pageList = <Widget>[];
+  static const String prefSelectedIndexKey = 'selectedIndex';
 
   @override
   void initState() {
     super.initState();
-    _pageList.add(const RecipeList());
-    _pageList.add(const MyRecipesList());
-    _pageList.add(const ShoppingList());
-    _getCurrentIndex();
+    pageList.add(const RecipeList());
+    pageList.add(const MyRecipesList());
+    pageList.add(const ShoppingList());
+    getCurrentIndex();
+  }
+
+  void saveCurrentIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt(prefSelectedIndexKey, _selectedIndex);
+  }
+
+  void getCurrentIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(prefSelectedIndexKey)) {
+      setState(() {
+        final index = prefs.getInt(prefSelectedIndexKey);
+        if (index != null) {
+          _selectedIndex = index;
+        }
+      });
+    }
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    _saveCurrentIndex();
-  }
-
-  void _saveCurrentIndex() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt(_prefSelectedIndexKey, _selectedIndex);
-  }
-
-  void _getCurrentIndex() async {
-    final prefs = await SharedPreferences.getInstance();
-    final index = prefs.getInt(_prefSelectedIndexKey);
-    if (index != null) {
-      setState(() => _selectedIndex = prefs.getInt(_prefSelectedIndexKey)!);
-    }
+    saveCurrentIndex();
   }
 
   @override
   Widget build(BuildContext context) {
+    String title;
+    switch (_selectedIndex) {
+      case 0:
+        title = 'Recipes';
+        break;
+      case 1:
+        title = 'Bookmarks';
+        break;
+      case 2:
+        title = 'Groceries';
+        break;
+      default:
+        title = 'Recipes';
+        break;
+    }
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/icon_recipe.svg',
+                  color: _selectedIndex == 0 ? green : Colors.grey,
+                  semanticsLabel: 'Recipes'),
+              label: 'Recipes'),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/icon_bookmarks.svg',
+                  color: _selectedIndex == 1 ? green : Colors.grey,
+                  semanticsLabel: 'Bookmarks'),
+              label: 'Bookmarks'),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/images/icon_shopping_list.svg',
+                  color: _selectedIndex == 2 ? green : Colors.grey,
+                  semanticsLabel: 'Groceries'),
+              label: 'Groceries'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: green,
+        onTap: _onItemTapped,
+      ),
       appBar: AppBar(
-        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -67,41 +107,14 @@ class _MainScreenState extends State<MainScreen> {
               Brightness.light, //navigation bar icon
         ),
         title: Text(
-          _selectedIndex == 0
-              ? 'Recipes'
-              : _selectedIndex == 1
-                  ? 'Bookmarks'
-                  : _selectedIndex == 2
-                      ? 'Groceries'
-                      : 'Recipes',
+          title,
           style: const TextStyle(
               fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black),
         ),
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pageList,
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: [
-          NavigationDestination(
-              icon: SvgPicture.asset('assets/images/icon_recipe.svg',
-                  color: _selectedIndex == 0 ? green : Colors.grey,
-                  semanticsLabel: 'Recipes'),
-              label: 'Recipes'),
-          NavigationDestination(
-              icon: SvgPicture.asset('assets/images/icon_bookmarks.svg',
-                  color: _selectedIndex == 1 ? green : Colors.grey,
-                  semanticsLabel: 'Bookmarks'),
-              label: 'Bookmarks'),
-          NavigationDestination(
-              icon: SvgPicture.asset('assets/images/icon_shopping_list.svg',
-                  color: _selectedIndex == 2 ? green : Colors.grey,
-                  semanticsLabel: 'Groceries'),
-              label: 'Groceries'),
-        ],
+        children: pageList,
       ),
     );
   }
