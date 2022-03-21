@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:chopper/chopper.dart';
 
-import 'model_response.dart';
-import 'recipe_model.dart';
+import 'package:recipe_finder/network/model_response.dart';
+import 'package:recipe_finder/network/recipe_model.dart';
 
 class ModelConverter implements Converter {
   @override

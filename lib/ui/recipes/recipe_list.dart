@@ -3,18 +3,17 @@ import 'dart:math';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_finder/ui/widgets/custom_dropdown.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:recipe_finder/data/models.dart';
 import 'package:recipe_finder/network/model_response.dart';
 import 'package:recipe_finder/network/recipe_model.dart';
-import 'package:recipe_finder/network/recipe_service.dart';
+import 'package:recipe_finder/network/service_interface.dart';
+import 'package:recipe_finder/ui/colors.dart';
 import 'package:recipe_finder/ui/recipe_card.dart';
 import 'package:recipe_finder/ui/recipes/recipe_details.dart';
-import 'package:recipe_finder/ui/colors.dart';
-import 'package:recipe_finder/data/models.dart';
-import 'package:recipe_finder/mock_service/mock_service.dart';
-import 'package:provider/provider.dart';
+import 'package:recipe_finder/ui/widgets/custom_dropdown.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -197,7 +196,7 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
-      future: Provider.of<MockService>(context).queryRecipes(
+      future: Provider.of<ServiceInterface>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),

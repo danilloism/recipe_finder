@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
 import 'package:recipe_finder/data/memory_repository.dart';
+import 'package:recipe_finder/data/repository.dart';
+import 'package:recipe_finder/network/recipe_service.dart';
+import 'package:recipe_finder/network/service_interface.dart';
 import 'package:recipe_finder/ui/main_screen.dart';
-import 'package:recipe_finder/mock_service/mock_service.dart';
 
 void main() {
   _setupLogging();
@@ -25,12 +28,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<MemoryRepository>(
+        Provider<Repository>(
           lazy: false,
           create: (_) => MemoryRepository(),
         ),
-        Provider(
-          create: (_) => MockService()..create(),
+        Provider<ServiceInterface>(
+          create: (_) => RecipeService.create(),
           lazy: false,
         )
       ],
