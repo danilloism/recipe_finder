@@ -13,6 +13,8 @@ import 'package:recipe_finder/ui/recipe_card.dart';
 import 'package:recipe_finder/ui/recipes/recipe_details.dart';
 import 'package:recipe_finder/ui/colors.dart';
 import 'package:recipe_finder/data/models.dart';
+import 'package:recipe_finder/mock_service/mock_service.dart';
+import 'package:provider/provider.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -92,8 +94,11 @@ class _RecipeListState extends State<RecipeList> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: <Widget>[
+          children: [
             _buildSearchCard(),
+            const SizedBox(
+              height: 12,
+            ),
             _buildRecipeLoader(context),
           ],
         ),
@@ -110,19 +115,7 @@ class _RecipeListState extends State<RecipeList> {
         padding: const EdgeInsets.all(4.0),
         child: Row(
           children: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                startSearch(searchTextController.text);
-                final currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-              },
-            ),
-            const SizedBox(
-              width: 6.0,
-            ),
+            const SizedBox(width: 6.0),
             Expanded(
               child: Row(
                 children: <Widget>[
@@ -168,6 +161,16 @@ class _RecipeListState extends State<RecipeList> {
                 ],
               ),
             ),
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                startSearch(searchTextController.text);
+                final currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -194,7 +197,7 @@ class _RecipeListState extends State<RecipeList> {
       return Container();
     }
     return FutureBuilder<Response<Result<APIRecipeQuery>>>(
-      future: RecipeService.create().queryRecipes(
+      future: Provider.of<MockService>(context).queryRecipes(
           searchTextController.text.trim(),
           currentStartPosition,
           currentEndPosition),

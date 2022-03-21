@@ -106,11 +106,11 @@ class _MainScreenState extends State<MainScreen> {
           systemNavigationBarIconBrightness:
               Brightness.light, //navigation bar icon
         ),
-        title: Text(
-          title,
-          style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black),
-        ),
+        title: Text(title,
+            style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black)),
       ),
       body: IndexedStack(
         index: _selectedIndex,
