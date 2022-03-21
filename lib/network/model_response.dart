@@ -1,6 +1,4 @@
-
-abstract class Result<T> {
-}
+abstract class Result<T> {}
 
 class Success<T> extends Result<T> {
   final T value;
