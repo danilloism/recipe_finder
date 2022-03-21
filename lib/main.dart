@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
+import 'package:recipe_finder/data/memory_repository.dart';
+import 'package:recipe_finder/ui/main_screen.dart';
+import 'package:recipe_finder/mock_service/mock_service.dart';
 
-import 'ui/main_screen.dart';
-
-Future<void> main() async {
+void main() {
   _setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -19,19 +21,30 @@ void _setupLogging() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Recipes',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Colors.white,
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MemoryRepository>(
+          lazy: false,
+          create: (_) => MemoryRepository(),
+        ),
+        Provider(
+          create: (_) => MockService()..create(),
+          lazy: false,
+        )
+      ],
+      child: MaterialApp(
+        title: 'Recipes',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: const MainScreen(),
       ),
-      home: const MainScreen(),
     );
   }
 }
